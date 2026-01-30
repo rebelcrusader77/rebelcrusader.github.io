@@ -1,0 +1,32 @@
+flowchart TB
+    %% Actors
+    Dev[Developer\n(Local Machine)]
+    User[End User\nWeb Browser]
+
+    %% GitHub
+    Repo[GitHub Repository]
+    Actions[GitHub Actions\n(CI/CD Runner)]
+
+    %% Build
+    Py[Python App / SSG\n(MkDocs / Pelican / Flask)]
+    Artifacts[Static Files\nHTML / CSS / JS]
+
+    %% Hosting
+    Pages[GitHub Pages\n(CDN + HTTPS)]
+
+    %% Development & Source Control
+    Dev -->|Git over HTTPS\n(HTTP/1.1 or HTTP/2)| Repo
+
+    %% CI/CD Trigger
+    Repo -->|Webhook Event\nHTTPS + JSON| Actions
+
+    %% Build Pipeline
+    Actions -->|pip install\nHTTPS (PyPI)| Py
+    Py -->|File I/O| Artifacts
+
+    %% Deployment
+    Actions -->|Git over HTTPS| Pages
+
+    %% Runtime Access
+    User -->|DNS (UDP/TCP 53)| Pages
+    User -->|HTTPS\nHTTP/2 or HTTP/3| Pages
